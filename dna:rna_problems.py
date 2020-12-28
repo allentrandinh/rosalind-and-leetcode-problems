@@ -184,8 +184,57 @@ def rna_splicing(DNA_list):
             protein += gencode[codon]
     return(protein)
 
+codon_code = {
+    'AUA':'I', 'AUC':'I', 'AUU':'I', 'AUG':'M',
+    'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACU':'T',
+    'AAC':'N', 'AAU':'N', 'AAA':'K', 'AAG':'K',
+    'AGC':'S', 'AGU':'S', 'AGA':'R', 'AGG':'R',
+    'CUA':'L', 'CUC':'L', 'CUG':'L', 'CUU':'L',
+    'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCU':'P',
+    'CAC':'H', 'CAU':'H', 'CAA':'Q', 'CAG':'Q',
+    'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGU':'R',
+    'GUA':'V', 'GUC':'V', 'GUG':'V', 'GUU':'V',
+    'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCU':'A',
+    'GAC':'D', 'GAU':'D', 'GAA':'E', 'GAG':'E',
+    'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGU':'G',
+    'UCA':'S', 'UCC':'S', 'UCG':'S', 'UCU':'S',
+    'UUC':'F', 'UUU':'F', 'UUA':'L', 'UUG':'L',
+    'UAC':'Y', 'UAU':'Y', 'UAA':'_', 'UAG':'_',
+    'UGC':'C', 'UGU':'C', 'UGA':'_', 'UGG':'W'}
+
+def rna_2_protein(RNA):
+    '''
+    :param RNA: CDS (length must be divisible by 3)
+    :return: protein seq
+    '''
+    def codon_to_aa(codon):
+        return(codon_code[codon])
+    codon = [RNA[3*i:3*i+3] for i in range(int(len(RNA)/3))]
+    protein = ''.join(list(map(codon_to_aa,codon)))
+    return(protein)
+
+dna = fm.multiple_fasta_seq("/Users/apd20500/Desktop/rosalind_lcsm.txt")
+dna_seq = list(dna.values())
+
+def shared_motif(DNA_list):
+    '''
+    :param DNA_list: DNA seqs in a list
+    :return: longest motif found (min_lenght = 2)
+    '''
+    #min motif = 2
+    #extract possible motif from first DNA, check if it appears in other motif, if no, breaks immediately
+    for i in range(len(DNA_list[0]),1,-1):
+        for k in range(0,int(len(DNA_list[0])-i+1)):
+            candidate_motif = DNA_list[0][k:k+i]
+            count = 0
+            for each_other_sequence in DNA_list[1:]:
+                if candidate_motif in each_other_sequence:
+                    count = count +1
+                else:
+                    break
+            if count == len(DNA_list[1:]):
+                return(candidate_motif)
 
 
-dna = fm.multiple_fasta_seq("/Users/apd20500/Desktop/rosalind_splc.txt")
 
 #dna = fm.single_seq_noheading("/Users/apd20500/Desktop/rosalind_revc.txt")
