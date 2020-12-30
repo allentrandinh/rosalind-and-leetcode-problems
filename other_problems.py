@@ -67,4 +67,29 @@ def dominant_prob(k,m,n):
                    + (m/pplt_size)*((m-1)/(pplt_size-1))*1/4
     return(1-not_dominant)
 
+def enum_kmers_lexicographically(list_ordered_characters,length_of_subset_string):
+    '''
+    :param list_ordered_characters
+    :param length_of_subset_string (<10)
+    :return: All strings of specified length that can be formed from the alphabet, ordered lexicographically
+    '''
+    all_substrings = []
+    for first_character in list_ordered_characters:
+        remaining_characters = list_ordered_characters
+        substring=first_character
+        remaining_characters = list_ordered_characters[list_ordered_characters.index(first_character):]
+        while len(substring) < length_of_subset_string:
+            for new_character in remaining_characters:
+                substring += new_character
+                print(substring)
+                remaining_characters = remaining_characters[remaining_characters.index(new_character):]
+                print(remaining_characters)
+        print(substring)
 
+print(enum_kmers_lexicographically(["A","C","T"],2))
+
+
+
+#import string
+#print(list(string.ascii_uppercase))
+#['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']

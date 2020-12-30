@@ -11,7 +11,7 @@ def single_seq_noheading(file_path):
 def multiple_fasta_seq(file_path):
     '''
     input txt file contain multiple fasta sequences
-    :return: dna sequence in a list without header
+    :return: dna sequences in a dictionary with key = fasta headers, value = sequences
     '''
     file_open = open(file_path, "r")
     dna_seq = file_open.read()

@@ -213,16 +213,12 @@ def rna_2_protein(RNA):
     protein = ''.join(list(map(codon_to_aa,codon)))
     return(protein)
 
-dna = fm.multiple_fasta_seq("/Users/apd20500/Desktop/rosalind_lcsm.txt")
-dna_seq = list(dna.values())
-
-def shared_motif(DNA_list):
+def longest_shared_motif(DNA_list):
     '''
     :param DNA_list: DNA seqs in a list
-    :return: longest motif found (min_lenght = 2)
+    :return: first longest motif found (min_motif_length = 2)
     '''
-    #min motif = 2
-    #extract possible motif from first DNA, check if it appears in other motif, if no, breaks immediately
+    #extract possible motif from first DNA, check if it appears in all other seqs; if no, breaks immediately
     for i in range(len(DNA_list[0]),1,-1):
         for k in range(0,int(len(DNA_list[0])-i+1)):
             candidate_motif = DNA_list[0][k:k+i]
@@ -234,6 +230,34 @@ def shared_motif(DNA_list):
                     break
             if count == len(DNA_list[1:]):
                 return(candidate_motif)
+
+def mutation_type(reference_base,base_to_compare):
+    '''
+    :param reference_base: base 1
+    :param base_to_compare: base 2
+    :return: 1 if it is transition, 0 if it is not a mutation, -1 if it is a transversion
+    '''
+    dna_bases = ["A", "T", "G", "C"]
+    corresponding_transition_base = ["G", "C", "A", "T"]
+    if reference_base == base_to_compare:
+        return 0
+    elif corresponding_transition_base[dna_bases.index(reference_base)] == base_to_compare:
+        return 1
+    else:
+        return -1
+
+def transition_transversion_ratio(DNA_list):
+    '''
+    :param DNA_list: 2 DNA seqs of equal lengths in a list
+    :return: ratio of transition to transversion mutations
+    '''
+    type_of_mutation = []
+    for i in range(len(DNA_list[0])):
+        type_of_mutation.append(mutation_type(DNA_list[0][i],DNA_list[1][i]))
+    ratio = (type_of_mutation.count(1))/(type_of_mutation.count(-1))
+    return(ratio)
+
+
 
 
 
